@@ -1,0 +1,35 @@
+api/node_modules
+
+api/experiencenash/.idea/
+api/experiencenash/.vscode/
+api/experiencenash/node_modules/
+api/experiencenash/build/
+api/experiencenash/tmp/
+api/experiencenash/temp/
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+api/experiencenash/website/node_modules
+api/experiencenash/website/.pnp
+api/experiencenash/website/.pnp.js
+
+# testing
+api/experiencenash/website/coverage
+
+# production
+api/experiencenash/website/build
+
+# misc
+api/experiencenash/website/.DS_Store
+api/experiencenash/website/.env.local
+api/experiencenash/website/.env.development.local
+api/experiencenash/website/.env.test.local
+api/experiencenash/website/.env.production.local
+
+api/experiencenash/website/npm-debug.log*
+api/experiencenash/website/yarn-debug.log*
+api/experiencenash/website/yarn-error.log*
+
+
+
