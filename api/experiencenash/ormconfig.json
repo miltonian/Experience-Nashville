@@ -1,11 +1,11 @@
 {
-   "type": "mysql",
+   "type": "postgres",
    "host": "127.0.0.1",
-   "port": 8889,
-   "username": "root",
-   "password": "root",
-   "database": "experiencenash",
-   "synchronize": true,
+   "port": 5432,
+   "username": "",
+   "password": "",
+   "database": "expnash",
+   "synchronize": false,
    "logging": ["error"],
    "entities": [
       "src/entity/**/*.ts"

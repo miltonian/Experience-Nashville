@@ -11,38 +11,37 @@ import multerS3 from 'multer-s3';
 import aws from 'aws-sdk';
 import { ArticleTag } from '../entity/ArticleTag';
 
-aws.config.update({
-  secretAccessKey: process.env.AWS_ACCESS_KEY,
-  accessKeyId: process.env.AWS_KEY_ID,
-});
-
-const s3 = new aws.S3();
-const bucketName = 'expnash';
-
-const upload1 = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: bucketName,
-    acl: 'public-read',
-    metadata: (req, file, cb) => {
-      cb(null, { fieldName: file.fieldname });
-    },
-    key: (req, file, cb) => {
-      const { imageName } = (req as Express.Request & {
-        params: { imageName: string };
-      }).params;
-      cb(null, `images/articles/${imageName}`);
-    },
-  }),
-});
-
 //Get all articles
 router.get('/', ArticleController.listAll);
 router.get('/tags', ArticleController.allTags);
 
-router.post('/image/:imageName', upload1.single('article'), async (req, res) =>
-  res.json({ url: `images/articles/${req.params.imageName}` })
-);
+router.post('/image/:imageName', async (req, res) => {
+  const { imageName } = req.params;
+
+  const s3 = new aws.S3({
+    credentials: {
+      accessKeyId: process.env.AWS_KEY_ID,
+      secretAccessKey: process.env.AWS_ACCESS_KEY,
+    },
+  });
+
+  const upload1 = multer({
+    storage: multerS3({
+      s3: s3,
+      bucket: process.env.AWS_BUCKET,
+      acl: 'public-read',
+      metadata: (req, file, cb) => {
+        cb(null, { fieldName: file.fieldname });
+      },
+      key: (req, file, cb) => {
+        cb(null, `images/articles/${imageName}`);
+      },
+    }),
+  }).single('article');
+  upload1(req, res, () => {
+    res.json({ url: (req.file as any).location });
+  });
+});
 
 // Get one article
 router.get(

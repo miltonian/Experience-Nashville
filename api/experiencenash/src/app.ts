@@ -7,6 +7,8 @@ import { Request, Response } from 'express';
 import routes from './routes';
 import { User } from './entity/User';
 
+require('dotenv').config();
+
 const app = express();
 
 createConnection()

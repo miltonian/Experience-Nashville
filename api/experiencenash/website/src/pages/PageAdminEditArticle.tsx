@@ -10,6 +10,7 @@ import { makeRequest, useResource } from '../Resource';
 import { TEST_ARTICLE } from './PageHome';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { randomInt } from 'crypto';
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -29,11 +30,12 @@ export const PageAdminEditArticle = (
   const [article] = useResource<ArticleAPI.Article>(
     `/articles/${props.match.params.id}`
   );
+  const { title = '' } = props.match.params;
   const [tags = []] = useResource<ArticleAPI.ArticleTag[]>(`/articles/tags`);
 
   const [values, setValues] = useState<ArticleAPI.Article>({
     ...BLANK_ARTICLE,
-    title: props.match.params.title || '',
+    title,
   });
   const [tagId, setTagId] = useState<number | undefined>(undefined);
   const [uploading, setUploading] = useState<boolean>(false);
@@ -62,10 +64,11 @@ export const PageAdminEditArticle = (
       return;
     }
     if (info.file.status === 'done') {
-      const S3_URL = 'https://expnash.s3.us-east-2.amazonaws.com/';
+      // const S3_URL = 'https://expnash.s3.us-east-2.amazonaws.com/';
+      // console.log(`${S3_URL}${JSON.parse(info.file.xhr.response).url}`);
       setValues({
         ...values,
-        images: [`${S3_URL}${JSON.parse(info.file.xhr.response).url}`],
+        images: [JSON.parse(info.file.xhr.response).url],
       });
       setUploading(false);
     }
@@ -88,9 +91,9 @@ export const PageAdminEditArticle = (
               listType='picture-card'
               className='avatar-uploader'
               showUploadList={false}
-              // action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
               action={`/articles/image/article-${values?.id}-${
-                encodeURI(values?.title) || randomInt(999999999)
+                encodeURIComponent(moment().unix() + values?.title) ||
+                randomInt(999999999)
               }.png`}
               beforeUpload={beforeUpload}
               onChange={handleChange}

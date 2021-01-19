@@ -12,8 +12,8 @@ export const FooterSection: React.FunctionComponent = () => {
         padding: '70px 0px',
       }}
     >
-      <div style={{ maxWidth: 600, fontWeight: 'bold' }}>
-        <div style={{ fontSize: 28, fontWeight: 600, padding: '20px 0px' }}>
+      <div style={{ maxWidth: 600, fontWeight: 'bold', textAlign: 'center' }}>
+        <div style={{ fontSize: 26, fontWeight: 600, padding: '20px 0px' }}>
           Stay in touch. We like to give out free things.
         </div>
         <StyledInput
@@ -40,6 +40,7 @@ export const FooterSection: React.FunctionComponent = () => {
 };
 
 const StyledInput = styled(Input)`
+  width: 80%;
   & .ant-input,
   .ant-input-group-addon {
     border: 0;

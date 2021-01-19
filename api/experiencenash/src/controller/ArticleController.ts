@@ -18,7 +18,8 @@ class ArticleController {
     const tagsRepository = getRepository(ArticleTag);
     const tags = await tagsRepository
       .createQueryBuilder()
-      .groupBy('name')
+      .select(['name'])
+      .groupBy('"ArticleTag"."name"')
       .getMany();
     res.json(tags);
   };

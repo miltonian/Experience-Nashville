@@ -44,54 +44,64 @@ export const PageHome: React.FunctionComponent = () => {
     <span />
   ) : (
     <StyledContainer>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Header>
-          Experience
-          <Select
-            value={tagName || ''}
-            onSelect={(tag) => {
-              setTagName(tag);
-            }}
-            style={{ width: 220 }}
-            bordered={false}
-          >
-            <Option key={`tag-0`} value={''} title={'All'}>
-              All
-            </Option>
-            {articleTags.map((t) => (
-              <Option key={`tag-${t.id}`} value={t.name} title={t.name}>
-                {t.name}
+      <div style={{ maxWidth: 1500 }}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Header>
+            Experience
+            <Select
+              value={tagName || ''}
+              onSelect={(tag) => {
+                setTagName(tag);
+              }}
+              style={{ width: 220 }}
+              bordered={false}
+            >
+              <Option key={`tag-0`} value={''} title={'All'}>
+                All
               </Option>
-            ))}
-          </Select>{' '}
-          Nashville
-        </Header>
-      </div>
-      <div
-        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
-      >
-        {first10.map((a) => (
-          <ArticleCard article={a} />
-        ))}
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          padding: '60px 0px',
-        }}
-      >
-        <Image
-          width={400}
-          src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-        />
-      </div>
-      <div
-        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
-      >
-        {last3.map((a) => (
-          <ArticleCard article={a} />
-        ))}
+              {articleTags.map((t) => (
+                <Option key={`tag-${t.id}`} value={t.name} title={t.name}>
+                  {t.name}
+                </Option>
+              ))}
+            </Select>{' '}
+            Nashville
+          </Header>
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+          }}
+        >
+          {first10.map((a) => (
+            <ArticleCard article={a} />
+          ))}
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            padding: '60px 0px',
+          }}
+        >
+          <Image
+            width={400}
+            src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+          />
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+          }}
+        >
+          {last3.map((a) => (
+            <ArticleCard article={a} />
+          ))}
+        </div>
       </div>
     </StyledContainer>
   );
@@ -129,6 +139,7 @@ const StyledContainer = styled.div`
   display: flex;
   padding: 0px 50px;
   flex-direction: column;
+  align-items: center;
 `;
 
 const Header = styled.div`

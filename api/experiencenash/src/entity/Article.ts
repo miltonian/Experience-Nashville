@@ -29,18 +29,18 @@ export class Article {
   @Column({ default: '' })
   description: string;
 
-  @Column({ type: 'json' })
+  @Column({ type: 'jsonb', default: [] })
   images: string[];
 
   @Column()
   authorId: number;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
-  @CreateDateColumn()
+  @Column({ default: () => 'NOW()', type: 'timestamptz' })
+  // @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
-  @UpdateDateColumn()
+  @Column({ default: () => 'NOW()', type: 'timestamptz' })
+  // @UpdateDateColumn()
   updatedAt: Date;
 
   @ManyToOne((type) => User, (user) => user.articles)

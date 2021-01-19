@@ -29,12 +29,12 @@ export class User {
   @IsNotEmpty()
   role: string;
 
-  @Column()
-  @CreateDateColumn()
+  @Column({ default: () => 'NOW()', type: 'timestamptz' })
+  // @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
-  @UpdateDateColumn()
+  @Column({ default: () => 'NOW()', type: 'timestamptz' })
+  // @UpdateDateColumn()
   updatedAt: Date;
 
   @OneToMany((type) => Article, (a) => a.author)
