@@ -20,7 +20,9 @@ export const PageArticleDetail = (
         {article.title}
         <br />
         <span style={{ fontSize: 16, fontWeight: 'normal' }}>
-          {moment(article.createdAt).format('MMM DD, YYYY')}
+          {moment(article.scheduledAt || article.createdAt).format(
+            'MMM DD, YYYY'
+          )}
         </span>
       </Header>
 

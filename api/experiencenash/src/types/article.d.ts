@@ -1,6 +1,6 @@
 declare namespace ArticleAPI {
   export interface ArticleTag {
-    id: number;
+    id?: number;
     name: string;
     articleId?: number;
   }
@@ -13,5 +13,6 @@ declare namespace ArticleAPI {
     images?: string[];
     tags: ArticleTag[];
     createdAt: string;
+    scheduledAt?: string;
   }
 }

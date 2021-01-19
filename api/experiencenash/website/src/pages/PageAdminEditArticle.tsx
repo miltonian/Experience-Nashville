@@ -1,4 +1,4 @@
-import { Select, Image, Table, Button, Input, message, Upload } from 'antd';
+import { Select, Button, Input, message, Upload, DatePicker } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import { RcFile, UploadChangeParam } from 'antd/lib/upload';
 import { UploadFile } from 'antd/lib/upload/interface';
@@ -30,13 +30,16 @@ export const PageAdminEditArticle = (
   const [article] = useResource<ArticleAPI.Article>(
     `/articles/${props.match.params.id}`
   );
-  const { title = '' } = props.match.params;
-  const [tags = []] = useResource<ArticleAPI.ArticleTag[]>(`/articles/tags`);
+
+  const title = props.match.params.title || '';
+
+  const [tags = []] = useResource<string[]>(`/articles/tags`);
 
   const [values, setValues] = useState<ArticleAPI.Article>({
     ...BLANK_ARTICLE,
     title,
   });
+
   const [tagId, setTagId] = useState<number | undefined>(undefined);
   const [uploading, setUploading] = useState<boolean>(false);
 
@@ -64,8 +67,6 @@ export const PageAdminEditArticle = (
       return;
     }
     if (info.file.status === 'done') {
-      // const S3_URL = 'https://expnash.s3.us-east-2.amazonaws.com/';
-      // console.log(`${S3_URL}${JSON.parse(info.file.xhr.response).url}`);
       setValues({
         ...values,
         images: [JSON.parse(info.file.xhr.response).url],
@@ -84,8 +85,7 @@ export const PageAdminEditArticle = (
       >
         <div style={{ width: '100%', maxWidth: 900 }}>
           <Header style={{ flex: 1 }}>New Article</Header>
-          <div style={{ padding: 10 }}>
-            <div style={{ padding: '5px 0px' }}>Title</div>
+          <InputContainer>
             <Upload
               name='article'
               listType='picture-card'
@@ -111,9 +111,9 @@ export const PageAdminEditArticle = (
                 </div>
               )}
             </Upload>
-          </div>
+          </InputContainer>
 
-          <div style={{ padding: 10 }}>
+          <InputContainer>
             <div style={{ padding: '5px 0px' }}>Title</div>
             <Input
               placeholder='Title'
@@ -121,9 +121,9 @@ export const PageAdminEditArticle = (
               autoFocus
               onChange={(e) => setValues({ ...values, title: e.target.value })}
             />
-          </div>
+          </InputContainer>
 
-          <div style={{ padding: 10 }}>
+          <InputContainer>
             <div style={{ padding: '5px 0px' }}>Subtitle</div>
             <Input
               placeholder='Subtitle'
@@ -133,9 +133,9 @@ export const PageAdminEditArticle = (
                 setValues({ ...values, subtitle: e.target.value })
               }
             />
-          </div>
+          </InputContainer>
 
-          <div style={{ padding: 10 }}>
+          <InputContainer>
             <div style={{ padding: '5px 0px' }}>Categories</div>
             <Select
               mode='tags'
@@ -146,26 +146,41 @@ export const PageAdminEditArticle = (
               onChange={(v) => {
                 v.forEach((name) => {
                   const found = tags.find(
-                    (t) => t.name.toLowerCase() === name.toLowerCase()
+                    (t) => t.toLowerCase() === name.toLowerCase()
                   );
-                  !found && tags.push({ id: -1, name: name });
+                  !found && tags.push(name);
                 });
-                console.log(v);
                 setValues({
                   ...values,
-                  tags: tags.filter((t) => v.includes(t.name)),
+                  tags: tags
+                    .filter((t) => v.includes(t))
+                    .map((t) => ({ name: t })),
                 });
               }}
             >
               {tags.map((t) => (
-                <Select.Option key={`tag-${t.name}`} value={t.name}>
-                  {t.name}
+                <Select.Option key={`tag-${t}`} value={t}>
+                  {t}
                 </Select.Option>
               ))}
             </Select>
-          </div>
+          </InputContainer>
 
-          <div style={{ padding: 10 }}>
+          <InputContainer>
+            <div style={{ padding: '5px 0px' }}>Schedule Post</div>
+            <DatePicker
+              value={
+                values.scheduledAt ? moment(values.scheduledAt) : undefined
+              }
+              onChange={(value) => {
+                console.log(moment(values.scheduledAt));
+                console.log(value);
+                setValues({ ...values, scheduledAt: moment(value).format() });
+              }}
+            />
+          </InputContainer>
+
+          <InputContainer>
             <div style={{ padding: '5px 0px' }}>Description</div>
             <Input.TextArea
               placeholder='Description'
@@ -175,7 +190,7 @@ export const PageAdminEditArticle = (
                 setValues({ ...values, description: e.target.value })
               }
             />
-          </div>
+          </InputContainer>
         </div>
 
         <div style={{ display: 'flex' }}>
@@ -191,6 +206,7 @@ export const PageAdminEditArticle = (
               if (resp) {
                 setValues(resp);
                 message.success(`Saved`);
+                history.goBack();
               } else {
                 message.error(`Something went wrong`);
               }
@@ -240,6 +256,10 @@ const StyledContainer = styled.div`
   display: flex;
   padding: 0px 50px;
   flex-direction: column;
+`;
+
+const InputContainer = styled.div`
+  padding: 10px;
 `;
 
 const Header = styled.div`

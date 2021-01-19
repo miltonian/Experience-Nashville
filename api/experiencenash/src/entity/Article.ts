@@ -43,6 +43,9 @@ export class Article {
   // @UpdateDateColumn()
   updatedAt: Date;
 
+  @Column({ type: 'timestamptz', nullable: true })
+  scheduledAt: Date;
+
   @ManyToOne((type) => User, (user) => user.articles)
   author: User;
 

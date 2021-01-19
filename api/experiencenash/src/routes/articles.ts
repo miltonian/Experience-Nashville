@@ -13,6 +13,7 @@ import { ArticleTag } from '../entity/ArticleTag';
 
 //Get all articles
 router.get('/', ArticleController.listAll);
+router.get('/public', ArticleController.listAllPublic);
 router.get('/tags', ArticleController.allTags);
 
 router.post('/image/:imageName', async (req, res) => {
@@ -45,13 +46,12 @@ router.post('/image/:imageName', async (req, res) => {
 
 // Get one article
 router.get(
-  '/:id([0-9]+)',
+  '/:id',
   //   [checkJwt, checkRole(['ADMIN'])],
   async (req, res) => {
     const id = Number(req.params.id);
     const articleRepo = getRepository(Article);
     const article = await articleRepo.findOne(id);
-
     res.json(article);
   }
 );
@@ -62,6 +62,7 @@ router.post('/', async (req, res) => {
   //Get articles from database
   const values = req.body.values;
   const articleRepo = getRepository(Article);
+  const tagRepo = getRepository(ArticleTag);
 
   let article = values;
 
@@ -84,7 +85,7 @@ router.post('/', async (req, res) => {
 
   // add tags
   const tagNames = values.tags.map((t: ArticleAPI.ArticleTag) => t.name);
-  const tagRepo = getRepository(ArticleTag);
+
   const articleTags = await tagRepo.find({
     where: { articleId: article.id },
   });

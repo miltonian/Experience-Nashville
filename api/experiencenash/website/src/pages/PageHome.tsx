@@ -19,10 +19,8 @@ export const TEST_ARTICLE: ArticleAPI.Article = {
 };
 
 export const PageHome: React.FunctionComponent = () => {
-  const [articles = []] = useResource<ArticleAPI.Article[]>(`articles`);
-  const [articleTags = []] = useResource<ArticleAPI.ArticleTag[]>(
-    `/articles/tags`
-  );
+  const [articles = []] = useResource<ArticleAPI.Article[]>(`articles/public`);
+  const [articleTags = []] = useResource<string[]>(`/articles/tags`);
   const [tagName, setTagName] = useState<string | undefined>(undefined);
   const [filtered, setFiltered] = useState<ArticleAPI.Article[]>(articles);
 
@@ -38,7 +36,7 @@ export const PageHome: React.FunctionComponent = () => {
   }, [tagName]);
 
   const first10 = filtered.slice(0, 6);
-  const last3 = filtered.slice(7, 10);
+  const last3 = filtered.slice(6, 9);
 
   return !filtered ? (
     <span />
@@ -60,8 +58,8 @@ export const PageHome: React.FunctionComponent = () => {
                 All
               </Option>
               {articleTags.map((t) => (
-                <Option key={`tag-${t.id}`} value={t.name} title={t.name}>
-                  {t.name}
+                <Option key={`tag-${t}`} value={t} title={t}>
+                  {t}
                 </Option>
               ))}
             </Select>{' '}
