@@ -3,7 +3,7 @@ require('dotenv').config();
 const settings = {
    production: [{
       "type": "postgres",
-      "url": `$(heroku config:get DATABASE_URL -a your-app)`,
+      "url": process.env.DATABASE_URL,
       "logging": ["error"],
       "entities": [
          "src/entity/**/*.ts"
