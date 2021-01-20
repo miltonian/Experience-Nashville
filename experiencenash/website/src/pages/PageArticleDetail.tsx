@@ -30,9 +30,10 @@ export const PageArticleDetail = (
         <Image src={article.images[0]} style={{ width: 'auto', height: 600 }} />
       )}
 
-      <p style={{ padding: '80px 100px', maxWidth: 900, width: '100%' }}>
-        {article.description}
-      </p>
+      <div
+        style={{ padding: '80px 100px', maxWidth: 900, width: '100%' }}
+        dangerouslySetInnerHTML={{ __html: article.description }}
+      />
 
       <SocialContainer>
         Share:

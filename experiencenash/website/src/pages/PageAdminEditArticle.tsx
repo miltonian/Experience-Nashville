@@ -11,6 +11,7 @@ import { TEST_ARTICLE } from './PageHome';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { randomInt } from 'crypto';
 import moment from 'moment';
+import RichTextEditor from 'react-rte';
 
 const { Option } = Select;
 
@@ -30,36 +31,27 @@ export const PageAdminEditArticle = (
   const [article] = useResource<ArticleAPI.Article>(
     `/articles/${props.match.params.id}`
   );
-
   const title = props.match.params.title || '';
-
   const [tags = []] = useResource<string[]>(`/articles/tags`);
-
+  const [uploading, setUploading] = useState<boolean>(false);
   const [values, setValues] = useState<ArticleAPI.Article>({
     ...BLANK_ARTICLE,
     title,
   });
-
-  const [tagId, setTagId] = useState<number | undefined>(undefined);
-  const [uploading, setUploading] = useState<boolean>(false);
+  const [editorText, setEditorText] = useState(
+    RichTextEditor.createValueFromString(article?.description || '', 'html')
+  );
 
   const history = useHistory();
 
   React.useEffect(() => {
-    article && setValues(article);
+    if (article) {
+      setValues(article);
+      setEditorText(
+        RichTextEditor.createValueFromString(article.description, 'html')
+      );
+    }
   }, [!!article]);
-
-  function beforeUpload(file: RcFile) {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 20;
-    if (!isLt2M) {
-      message.error('Image must smaller than 20MB!');
-    }
-    return isJpgOrPng && isLt2M;
-  }
 
   const handleChange = (info: UploadChangeParam<UploadFile<any>>) => {
     if (info.file.status === 'uploading') {
@@ -182,13 +174,17 @@ export const PageAdminEditArticle = (
 
           <InputContainer>
             <div style={{ padding: '5px 0px' }}>Description</div>
-            <Input.TextArea
+            {/* <Input.TextArea
               placeholder='Description'
               value={values.description}
               autoFocus
               onChange={(e) =>
                 setValues({ ...values, description: e.target.value })
               }
+            /> */}
+            <RichTextEditor
+              value={editorText}
+              onChange={(val) => val && setEditorText(val)}
             />
           </InputContainer>
         </div>
@@ -201,7 +197,12 @@ export const PageAdminEditArticle = (
               const resp = await makeRequest<ArticleAPI.Article | undefined>(
                 `/articles`,
                 'POST',
-                { values }
+                {
+                  values: {
+                    ...values,
+                    description: editorText.toString('html'),
+                  },
+                }
               );
               if (resp) {
                 setValues(resp);
@@ -221,36 +222,17 @@ export const PageAdminEditArticle = (
   );
 };
 
-const AddArticleModal = (props: {
-  show: boolean;
-  onClose: (updated: boolean) => void;
-}) => {
-  const [title, setTitle] = useState<string>('');
-  const history = useHistory();
-  return (
-    <Modal
-      visible={props.show}
-      title='Add new article'
-      onOk={async () => {
-        // const resp = await makeRequest(`articles`, 'POST', { title });
-        // console.log(resp);
-        history.push(`admin/article/new?t=${title}`);
-        props.onClose(true);
-      }}
-      okText='Save'
-      onCancel={() => props.onClose(false)}
-    >
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <div style={{ padding: '5px 0px' }}>Title</div>
-        <Input
-          placeholder='Title'
-          autoFocus
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </div>
-    </Modal>
-  );
-};
+export function beforeUpload(file: RcFile) {
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  if (!isJpgOrPng) {
+    message.error('You can only upload JPG/PNG file!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 20;
+  if (!isLt2M) {
+    message.error('Image must smaller than 20MB!');
+  }
+  return isJpgOrPng && isLt2M;
+}
 
 const StyledContainer = styled.div`
   display: flex;
@@ -258,7 +240,7 @@ const StyledContainer = styled.div`
   flex-direction: column;
 `;
 
-const InputContainer = styled.div`
+export const InputContainer = styled.div`
   padding: 10px;
 `;
 

@@ -7,6 +7,7 @@ import {
   Link,
   useRouteMatch,
   useParams,
+  useHistory,
 } from 'react-router-dom';
 import { NavigationBar } from './NavigationBar';
 import { PageHome } from './pages/PageHome';
@@ -14,8 +15,55 @@ import { PageArticleDetail } from './pages/PageArticleDetail';
 import { PageAdminEdit } from './pages/PageAdminEdit';
 import { FooterSection } from './FooterSection';
 import { PageAdminEditArticle } from './pages/PageAdminEditArticle';
+import { PageAdminEditAds } from './pages/PageAdminEditAds';
+import Layout, { Content } from 'antd/lib/layout/layout';
+import { Menu } from 'antd';
+import Sider from 'antd/lib/layout/Sider';
 
 export const App: React.FunctionComponent = () => {
+  function Admin() {
+    let { path } = useRouteMatch();
+
+    const history = useHistory();
+    return (
+      <div>
+        <Layout>
+          <Sider width={200} theme={'light'}>
+            <Menu mode='vertical'>
+              <Menu.Item
+                key='page-ads'
+                onClick={() => history.push(`${path}/ads`)}
+              >
+                Ads
+              </Menu.Item>
+              <Menu.Item
+                key='page-articles'
+                onClick={() => history.push(`${path}`)}
+              >
+                Articles
+              </Menu.Item>
+            </Menu>
+          </Sider>
+          <Content>
+            <Switch>
+              <Route path={`${path}/ads`}>
+                <PageAdminEditAds />
+              </Route>
+              <Route
+                key={'articleDetail'}
+                path={`${path}/article/:id/edit/:title`}
+                component={PageAdminEditArticle}
+              />
+              <Route path={`${path}`}>
+                <PageAdminEdit />
+              </Route>
+            </Switch>
+          </Content>
+        </Layout>
+      </div>
+    );
+  }
+
   return (
     <Router>
       <div>
@@ -27,18 +75,8 @@ export const App: React.FunctionComponent = () => {
             path='/article/:articleId/:articleTitle'
             component={PageArticleDetail}
           />
-          <Route
-            key={'articleDetail'}
-            path='/admin/article/:id/edit/:title'
-            component={PageAdminEditArticle}
-          />
-          <Route
-            key={'articleDetail'}
-            path='/admin/article/edit/:title'
-            component={PageAdminEditArticle}
-          />
           <Route path='/admin'>
-            <PageAdminEdit />
+            <Admin />
           </Route>
           <Route path='/'>
             <PageHome />

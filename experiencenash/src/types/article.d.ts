@@ -15,4 +15,11 @@ declare namespace ArticleAPI {
     createdAt: string;
     scheduledAt?: string;
   }
+
+  export interface Ad {
+    id: number;
+    name: string;
+    imagepath: string;
+    impressions?: number;
+  }
 }

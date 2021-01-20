@@ -24,6 +24,9 @@ export const PageHome: React.FunctionComponent = () => {
   const [tagName, setTagName] = useState<string | undefined>(undefined);
   const [filtered, setFiltered] = useState<ArticleAPI.Article[]>(articles);
 
+  const [ads = []] = useResource<ArticleAPI.Ad[]>(`ads`);
+  const randomAd = ads[Math.floor(Math.random() * ads.length)];
+
   React.useEffect(() => setFiltered(articles), [articles.length]);
   React.useEffect(() => {
     setFiltered(
@@ -84,10 +87,7 @@ export const PageHome: React.FunctionComponent = () => {
             padding: '60px 0px',
           }}
         >
-          <Image
-            width={400}
-            src='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-          />
+          {randomAd && <Image height={400} src={randomAd.imagepath} />}
         </div>
         <div
           style={{

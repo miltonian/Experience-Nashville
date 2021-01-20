@@ -42,7 +42,7 @@ const StyledCard = styled(Card)`
   width: 350px;
   margin: 30px 20px;
   & .ant-card-cover {
-    height: 260px;
+    height: 230px;
     overflow: hidden;
   }
 `;

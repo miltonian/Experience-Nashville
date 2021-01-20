@@ -1,4 +1,7 @@
-import { Select, Image, Table, Button, Input } from 'antd';
+import { Select, Image, Table, Button, Input, Drawer, Menu } from 'antd';
+import Layout, { Content } from 'antd/lib/layout/layout';
+import Sider from 'antd/lib/layout/Sider';
+import SubMenu from 'antd/lib/menu/SubMenu';
 import Modal from 'antd/lib/modal/Modal';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -25,6 +28,7 @@ export const PageAdminEdit: React.FunctionComponent = () => {
         <Header style={{ flex: 1 }}>Articles</Header>
         <Button onClick={() => setArticleModalVisible(true)}>Add</Button>
       </div>
+
       <Table
         onRow={(record, rowIndex) => ({
           onClick: () =>
