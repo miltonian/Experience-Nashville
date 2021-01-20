@@ -1,37 +1,37 @@
 node_modules
-experiencenash/src/.env
+src/.env
 
-experiencenash/.idea/
-experiencenash/.vscode/
-experiencenash/node_modules/
-experiencenash/build/
-experiencenash/tmp/
-experiencenash/temp/
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-experiencenash/website/node_modules
-experiencenash/website/.pnp
-experiencenash/website/.pnp.js
+website/node_modules
+website/.pnp
+website/.pnp.js
 
 # testing
-experiencenash/website/coverage
+website/coverage
 
 # production
-experiencenash/website/build
+website/build
 
 # misc
-experiencenash/website/.DS_Store
-experiencenash/website/.env.local
-experiencenash/website/.env.development.local
-experiencenash/website/.env.test.local
-experiencenash/website/.env.production.local
+website/.DS_Store
+website/.env.local
+website/.env.development.local
+website/.env.test.local
+website/.env.production.local
 
-experiencenash/website/npm-debug.log*
-experiencenash/website/yarn-debug.log*
-experiencenash/website/yarn-error.log*
+website/npm-debug.log*
+website/yarn-debug.log*
+website/yarn-error.log*
 
 
 
-experiencenash/.env
+.env
