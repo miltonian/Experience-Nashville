@@ -4,7 +4,7 @@ const settings = {
    production: [{
       "type": "postgres",
       "url": process.env.DATABASE_URL,
-      "ssl": true,
+      "ssl": {rejectUnauthorized: false},
       "logging": ["error"],
       "entities": [
          "src/entity/**/*.ts"
