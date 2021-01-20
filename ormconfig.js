@@ -45,4 +45,4 @@ const settings = {
    }
 }]}
 
-module.exports = settings[process.env.NODE_ENV] || settings.development;
+module.exports = settings[process.env.NODE_ENV] || settings.test;
